@@ -5,23 +5,9 @@ export const CustomCursor = () => {
   const cursorX = useMotionValue(-100);
   const cursorY = useMotionValue(-100);
 
-  // Spring configs for different "weights" of antigravity
-  const springMedium = { damping: 25, stiffness: 250, mass: 0.2 };
-  const springIntermediate = { damping: 22, stiffness: 200, mass: 0.3 };
-  const springHeavy = { damping: 20, stiffness: 150, mass: 0.4 };
-  const springLight = { damping: 30, stiffness: 400, mass: 0.1 };
-
-  const xMedium = useSpring(cursorX, springMedium);
-  const yMedium = useSpring(cursorY, springMedium);
-
-  const xIntermediate = useSpring(cursorX, springIntermediate);
-  const yIntermediate = useSpring(cursorY, springIntermediate);
-
-  const xHeavy = useSpring(cursorX, springHeavy);
-  const yHeavy = useSpring(cursorY, springHeavy);
-
-  const xLight = useSpring(cursorX, springLight);
-  const yLight = useSpring(cursorY, springLight);
+  const springTrail = { damping: 28, stiffness: 360, mass: 0.18 };
+  const xTrail = useSpring(cursorX, springTrail);
+  const yTrail = useSpring(cursorY, springTrail);
 
   const [isHovering, setIsHovering] = useState(false);
   const [isClicking, setIsClicking] = useState(false);
@@ -30,17 +16,21 @@ export const CustomCursor = () => {
     const updateMousePosition = (e: MouseEvent) => {
       cursorX.set(e.clientX);
       cursorY.set(e.clientY);
-      
-      const target = e.target as HTMLElement;
-      const isClickable = 
-        target.tagName.toLowerCase() === 'a' ||
-        target.tagName.toLowerCase() === 'button' ||
-        target.closest('a') !== null ||
-        target.closest('button') !== null ||
-        target.classList.contains('cursor-pointer') ||
-        target.closest('.cursor-pointer') !== null ||
-        target.hasAttribute('onclick');
-        
+
+      const target = e.target as HTMLElement | null;
+      if (!target) return;
+      const isClickable =
+        target.tagName?.toLowerCase() === 'a' ||
+        target.tagName?.toLowerCase() === 'button' ||
+        target.tagName?.toLowerCase() === 'input' ||
+        target.tagName?.toLowerCase() === 'select' ||
+        target.tagName?.toLowerCase() === 'textarea' ||
+        target.closest?.('a') !== null ||
+        target.closest?.('button') !== null ||
+        target.classList?.contains('cursor-pointer') ||
+        target.closest?.('.cursor-pointer') !== null ||
+        target.hasAttribute?.('onclick');
+
       setIsHovering(!!isClickable);
     };
 
@@ -60,71 +50,121 @@ export const CustomCursor = () => {
 
   return (
     <div className="pointer-events-none fixed inset-0 z-[99999] overflow-hidden">
-      {/* Main Reticle - Instant Follow */}
+      {/* Subtle Trailing Tri-Color Halo (Red, White & Blue) */}
       <motion.div
-        className="absolute top-0 left-0 w-8 h-8 flex items-center justify-center drop-shadow-md"
-        style={{ x: cursorX, y: cursorY, translateX: '-50%', translateY: '-50%' }}
-        animate={{ scale: isClicking ? 0.7 : isHovering ? 1.3 : 1 }}
-        transition={{ type: 'tween', ease: 'backOut', duration: 0.15 }}
+        className="absolute top-0 left-0 w-9 h-9 flex items-center justify-center"
+        style={{ x: xTrail, y: yTrail, translateX: '-35%', translateY: '-35%' }}
+        animate={{
+          scale: isClicking ? 0.75 : isHovering ? 1.35 : 0.9,
+          opacity: isHovering ? 0.95 : 0.45,
+          rotate: isHovering ? 90 : 0,
+        }}
+        transition={{ duration: 0.22, ease: 'easeOut' }}
       >
-        <svg viewBox="0 0 24 24" fill="none" strokeWidth="1.5" className="w-full h-full drop-shadow-[0_0_4px_rgba(250,204,21,0.6)]">
-          {/* Eagle Eyebrow */}
-          <path d="M 1 8 L 9 3 H 15 L 23 8" stroke="white" strokeWidth="3" strokeLinejoin="round" strokeLinecap="round" />
-          {/* Eagle Eye */}
-          <path d="M2 12L9 5H15L22 12C22 12 18 19 12 19C6 19 2 12 2 12Z" stroke="white" strokeLinejoin="round" />
-          <circle cx="12" cy="11" r="3" fill="#facc15" stroke="#facc15" />
-          <circle cx="12" cy="11" r="1" fill="#000000" stroke="#000000" />
+        <svg viewBox="0 0 40 40" className="w-full h-full overflow-visible">
+          <circle
+            cx="20"
+            cy="20"
+            r="15"
+            fill="none"
+            stroke="#dc2626"
+            strokeWidth="2"
+            strokeDasharray="28 66"
+            strokeLinecap="round"
+          />
+          <circle
+            cx="20"
+            cy="20"
+            r="15"
+            fill="none"
+            stroke="#ffffff"
+            strokeWidth="2"
+            strokeDasharray="28 66"
+            strokeDashoffset="-31"
+            strokeLinecap="round"
+          />
+          <circle
+            cx="20"
+            cy="20"
+            r="15"
+            fill="none"
+            stroke="#2563eb"
+            strokeWidth="2"
+            strokeDasharray="28 66"
+            strokeDashoffset="-62"
+            strokeLinecap="round"
+          />
         </svg>
       </motion.div>
 
-      {/* Antigravity Ring 1 (Medium - White) */}
+      {/* Main Red, White & Blue Sculpted Mouse Pointer (Tip anchored at exact cursorX, cursorY) */}
       <motion.div
-        className="absolute top-0 left-0 w-12 h-12 rounded-full border-2 border-white/80 shadow-[0_0_8px_rgba(255,255,255,0.6)]"
-        style={{ x: xMedium, y: yMedium, translateX: '-50%', translateY: '-50%' }}
-        animate={{ scale: isClicking ? 0.5 : isHovering ? 1.5 : 1 }}
-      />
-
-      {/* Antigravity Ring 1.5 (Intermediate - Red) */}
-      <motion.div
-        className="absolute top-0 left-0 w-14 h-14 rounded-full border-2 border-red-600/70 border-dotted shadow-[0_0_8px_rgba(220,38,38,0.5)]"
-        style={{ x: xIntermediate, y: yIntermediate, translateX: '-50%', translateY: '-50%' }}
-        animate={{ rotate: -360, scale: isHovering ? 1.35 : 1 }}
-        transition={{ rotate: { duration: 15, repeat: Infinity, ease: "linear" } }}
-      />
-
-      {/* Antigravity Ring 2 (Heavy/Slow - Blue) */}
-      <motion.div
-        className="absolute top-0 left-0 w-16 h-16 rounded-full border-2 border-blue-600/60 border-dashed shadow-[0_0_10px_rgba(37,99,235,0.4)]"
-        style={{ x: xHeavy, y: yHeavy, translateX: '-50%', translateY: '-50%' }}
-        animate={{ rotate: 360, scale: isHovering ? 1.2 : 1 }}
-        transition={{ rotate: { duration: 20, repeat: Infinity, ease: "linear" } }}
-      />
-
-      {/* Floating Debris (Light/Fast) */}
-      <motion.div
-        className="absolute top-0 left-0"
-        style={{ x: xLight, y: yLight }}
-        animate={{ rotate: 360 }}
-        transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+        className="absolute top-0 left-0 w-7 h-7"
+        style={{ x: cursorX, y: cursorY, translateX: '-2px', translateY: '-2px' }}
+        animate={{
+          scale: isClicking ? 0.86 : isHovering ? 1.12 : 1,
+        }}
+        transition={{ type: 'tween', ease: 'backOut', duration: 0.12 }}
       >
-        <div className="absolute top-0 left-0 w-2 h-2 bg-red-600 rounded-full shadow-[0_0_6px_rgba(220,38,38,0.8)]" style={{ transform: 'translate(25px, -25px)' }} />
-      </motion.div>
-      <motion.div
-        className="absolute top-0 left-0"
-        style={{ x: xMedium, y: yMedium }}
-        animate={{ rotate: -360 }}
-        transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
-      >
-        <div className="absolute top-0 left-0 w-2 h-2 bg-blue-600 rounded-full shadow-[0_0_6px_rgba(37,99,235,0.8)]" style={{ transform: 'translate(-25px, 25px)' }} />
-      </motion.div>
-      <motion.div
-        className="absolute top-0 left-0"
-        style={{ x: xHeavy, y: yHeavy }}
-        animate={{ rotate: 360 }}
-        transition={{ duration: 5, repeat: Infinity, ease: "linear" }}
-      >
-        <div className="absolute top-0 left-0 w-2 h-2 bg-white rounded-full shadow-[0_0_6px_rgba(255,255,255,0.8)]" style={{ transform: 'translate(-25px, -25px)' }} />
+        <svg
+          viewBox="0 0 32 32"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          className="w-full h-full drop-shadow-[0_3px_8px_rgba(2,6,23,0.55)]"
+        >
+          <defs>
+            <linearGradient id="mgcCursorRed" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#ef4444" />
+              <stop offset="100%" stopColor="#b91c1c" />
+            </linearGradient>
+            <linearGradient id="mgcCursorWhite" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#ffffff" />
+              <stop offset="100%" stopColor="#e2e8f0" />
+            </linearGradient>
+            <linearGradient id="mgcCursorBlue" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#3b82f6" />
+              <stop offset="100%" stopColor="#1e3a8a" />
+            </linearGradient>
+          </defs>
+
+          {/* Outer Dark Precision Bevel */}
+          <path
+            d="M 2 2 L 27 12.5 L 16.5 16.5 L 22 26.5 L 17.5 28.5 L 12 18.5 L 5.5 26 Z"
+            fill="#0f172a"
+            stroke="#0f172a"
+            strokeWidth="2.2"
+            strokeLinejoin="round"
+          />
+
+          {/* Top-Right Wing: Crimson Red Facet */}
+          <path
+            d="M 2.5 2.5 L 26.5 12.5 L 16 15.8 Z"
+            fill="url(#mgcCursorRed)"
+          />
+
+          {/* Bottom-Left Wing: Royal Blue Facet */}
+          <path
+            d="M 2.5 2.5 L 16 15.8 L 5.8 25.5 Z"
+            fill="url(#mgcCursorBlue)"
+          />
+
+          {/* Center Spine & Tail: Crisp White Facet */}
+          <path
+            d="M 2.5 2.5 L 17.2 14.8 L 21.5 26.2 L 17.8 28 L 12.5 17.2 Z"
+            fill="url(#mgcCursorWhite)"
+          />
+
+          {/* Crisp Inner Highlight Line */}
+          <path
+            d="M 2.5 2.5 L 26.5 12.5 L 16.5 16.2 L 21.5 26.2 L 17.8 28 L 12.2 17.8 L 5.8 25.5 Z"
+            stroke="#ffffff"
+            strokeOpacity="0.85"
+            strokeWidth="0.9"
+            strokeLinejoin="round"
+          />
+        </svg>
       </motion.div>
     </div>
   );
 };
+
