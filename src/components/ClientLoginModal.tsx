@@ -11,34 +11,56 @@ interface SessionData {
   timestamp: string;
 }
 
-const INTERNAL_PORTAL_BASE = 'http://localhost:8090';
+const HOSTED_INTERNAL_BASE = 'https://sideprojo.github.io/milton-group-concepts-site';
+const LOCAL_INTERNAL_BASE = 'http://localhost:8090';
+
+const getInternalBase = () => {
+  if (typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')) {
+    return LOCAL_INTERNAL_BASE;
+  }
+  return HOSTED_INTERNAL_BASE;
+};
 
 const INTERNAL_PORTALS = [
   {
     title: 'MGC Internal Data Commerce & Career Hub',
     subtitle: 'SAS ModelOps • CIPP/US & CIPP/G • VA SDVOSB Command',
-    url: `${INTERNAL_PORTAL_BASE}/index.html`,
+    page: 'index.html',
     badge: 'VIEWER_ONBOARDED',
     icon: Layers
   },
   {
+    title: 'Defense-in-Depth & Compliance Center',
+    subtitle: 'CMMC 2.0 L2 • NIST 800-171 • CIPP/US • Trust-But-Verify Audit',
+    page: 'compliance-trust-center.html',
+    badge: 'TRUST BUT VERIFY',
+    icon: ShieldCheck
+  },
+  {
+    title: 'Enterprise Integrations & Connections Hub',
+    subtitle: 'GCP • Azure Sentinel • SAM.gov • Mercury • LangGraph Mesh',
+    page: 'integrations-connections-hub.html',
+    badge: '20+ CONNECTORS',
+    icon: Building2
+  },
+  {
     title: 'Visual Cloud Agent & LangGraph Studio',
     subtitle: 'Google Vertex AI + Azure AI Foundry + LangChain Supervisor Graph',
-    url: `${INTERNAL_PORTAL_BASE}/agent-workflow-studio.html`,
+    page: 'agent-workflow-studio.html',
     badge: 'LIVE TELEMETRY',
     icon: Cpu
   },
   {
     title: '3D Geospatial & Google Earth Command',
     subtitle: 'Zero-Seat-Cost CesiumJS + GeoJSON Defense & Logistics Corridors',
-    url: `${INTERNAL_PORTAL_BASE}/earth-3d.html`,
+    page: 'earth-3d.html',
     badge: 'ZERO-CHARGE GUARD',
     icon: Globe
   },
   {
     title: '360° WebXR VR Command Deck',
     subtitle: 'Spatial Computing & Multi-Screen Operations Environment',
-    url: `${INTERNAL_PORTAL_BASE}/vr-command.html`,
+    page: 'vr-command.html',
     badge: 'WEBXR READY',
     icon: Sparkles
   }
@@ -346,28 +368,29 @@ export const ClientLoginModal = ({ isOpen, onClose }: { isOpen: boolean; onClose
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                     {INTERNAL_PORTALS.map((portal, i) => {
                       const Icon = portal.icon;
+                      const targetUrl = `${getInternalBase()}/${portal.page}?mgc_verify=1&role=${encodeURIComponent(session.role)}&name=${encodeURIComponent(session.name)}`;
                       return (
                         <a
                           key={i}
-                          href={portal.url}
+                          href={targetUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="group p-4 rounded-2xl bg-slate-50 hover:bg-blue-50/70 border border-slate-200 hover:border-blue-300 transition-all flex flex-col justify-between"
+                          className="group p-3.5 rounded-2xl bg-slate-50 hover:bg-blue-50/70 border border-slate-200 hover:border-blue-300 transition-all flex flex-col justify-between"
                         >
-                          <div className="flex items-start justify-between gap-2 mb-2">
-                            <div className="w-9 h-9 rounded-xl bg-blue-600/10 text-blue-700 flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white transition-colors">
-                              <Icon className="w-5 h-5" />
+                          <div className="flex items-start justify-between gap-2 mb-1.5">
+                            <div className="w-8 h-8 rounded-xl bg-blue-600/10 text-blue-700 flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                              <Icon className="w-4 h-4" />
                             </div>
                             <span className="text-[9px] font-extrabold uppercase tracking-widest px-2 py-0.5 rounded-full bg-white border border-slate-200 text-slate-700">
                               {portal.badge}
                             </span>
                           </div>
                           <div>
-                            <h4 className="text-sm font-extrabold text-slate-900 group-hover:text-blue-700 flex items-center justify-between">
+                            <h4 className="text-xs font-extrabold text-slate-900 group-hover:text-blue-700 flex items-center justify-between">
                               {portal.title}
                               <ExternalLink className="w-3.5 h-3.5 opacity-60 group-hover:opacity-100" />
                             </h4>
-                            <p className="text-[11px] text-slate-600 font-medium mt-1">
+                            <p className="text-[10px] text-slate-600 font-medium mt-0.5">
                               {portal.subtitle}
                             </p>
                           </div>
@@ -379,15 +402,15 @@ export const ClientLoginModal = ({ isOpen, onClose }: { isOpen: boolean; onClose
 
                 <div className="pt-2 flex items-center justify-between text-[11px] text-slate-600 border-t border-slate-200">
                   <span className="flex items-center gap-1.5 font-semibold">
-                    <Building2 className="w-3.5 h-3.5 text-blue-600" /> EIN: 92-1370285 • SDVOSB Verified
+                    <Building2 className="w-3.5 h-3.5 text-blue-600" /> EIN: 92-1370285 • SDVOSB • Trust-But-Verify Active
                   </span>
                   <a
-                    href={`${INTERNAL_PORTAL_BASE}/onboarding-portal.html`}
+                    href={`${getInternalBase()}/onboarding-portal.html?mgc_verify=1`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="font-extrabold text-blue-700 hover:underline flex items-center gap-1"
                   >
-                    Open Full Onboarding Hub <ExternalLink className="w-3 h-3" />
+                    Open Full Guided Suite <ExternalLink className="w-3 h-3" />
                   </a>
                 </div>
               </div>

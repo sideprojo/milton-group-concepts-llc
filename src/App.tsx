@@ -34,6 +34,7 @@ const AnimatedRoutes = () => {
         <Route path="/about" element={<PageWrapper><About /></PageWrapper>} />
         <Route path="/services" element={<PageWrapper><Capabilities /></PageWrapper>} />
         <Route path="/contact" element={<PageWrapper><Contact /></PageWrapper>} />
+        <Route path="*" element={<PageWrapper><Home /></PageWrapper>} />
       </Routes>
     </AnimatePresence>
   );
@@ -41,7 +42,7 @@ const AnimatedRoutes = () => {
 
 export default function App() {
   return (
-    <Router>
+    <Router basename={import.meta.env.BASE_URL}>
       <CustomCursor />
       <Layout>
         <AnimatedRoutes />
