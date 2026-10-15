@@ -60,14 +60,14 @@ const Home = () => {
       </motion.div>
 
       {/* Hero Section - Center Focused */}
-      <section className="w-full flex flex-col items-center justify-center text-center px-6 relative z-10 mt-20">
-        <div className="max-w-7xl flex flex-col items-center justify-center">
+      <section className="w-full flex flex-col items-center justify-center text-center px-4 sm:px-6 relative z-10 mt-24 md:mt-20 pb-20 md:pb-0">
+        <div className="max-w-7xl flex flex-col items-center justify-center w-full">
           <motion.h1 
             initial={{ opacity: 0, scale: 0.95, y: 30 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
             onClick={triggerFireworks}
-            className="text-5xl md:text-7xl lg:text-[5.5rem] text-slate-950 font-sans font-black max-w-5xl mx-auto mb-8 leading-[1.05] tracking-tighter mix-blend-multiply cursor-none select-none relative"
+            className="text-4xl sm:text-5xl md:text-7xl lg:text-[5.5rem] text-slate-950 font-sans font-black max-w-5xl mx-auto mb-5 md:mb-8 leading-[1.08] md:leading-[1.05] tracking-tighter mix-blend-multiply md:cursor-none select-none relative"
             style={{
               textShadow: `
                 0px 1px 0px #cbd5e1,
@@ -89,7 +89,7 @@ const Home = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1.4, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-            className="text-xl md:text-3xl text-blue-900 font-extrabold max-w-3xl mx-auto mb-16 tracking-tight drop-shadow-[0_2px_10px_rgba(255,255,255,0.95)]"
+            className="text-base sm:text-xl md:text-3xl text-blue-900 font-extrabold max-w-3xl mx-auto mb-8 md:mb-16 tracking-tight drop-shadow-[0_2px_10px_rgba(255,255,255,0.95)] px-2"
           >
             We make complex operations simpler.
           </motion.p>
@@ -98,21 +98,37 @@ const Home = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1.4, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
-            className="flex flex-col md:flex-row items-center justify-center gap-6"
+            className="flex flex-col md:flex-row items-center justify-center gap-3.5 md:gap-6 w-full sm:w-auto px-2"
           >
             <Link 
               to="/services" 
-              className="px-8 py-4 bg-blue-600 text-white font-extrabold text-sm hover:bg-blue-700 transition-all duration-300 rounded-full shadow-[0_10px_30px_rgba(37,99,235,0.45)] hover:shadow-[0_15px_40px_rgba(37,99,235,0.65)] hover:-translate-y-1 flex items-center gap-2 group"
+              className="w-full sm:w-auto justify-center px-8 py-4 bg-blue-600 text-white font-extrabold text-sm hover:bg-blue-700 transition-all duration-300 rounded-full shadow-[0_10px_30px_rgba(37,99,235,0.45)] hover:shadow-[0_15px_40px_rgba(37,99,235,0.65)] hover:-translate-y-1 flex items-center gap-2 group"
             >
               Our Services <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </Link>
             <button 
               onClick={() => setIsContactModalOpen(true)}
-              className="px-8 py-4 bg-white/95 backdrop-blur-md text-slate-900 border border-slate-300 font-extrabold text-sm hover:bg-white transition-all duration-300 rounded-full shadow-xl hover:shadow-2xl hover:-translate-y-1"
+              className="w-full sm:w-auto justify-center px-8 py-4 bg-white/95 backdrop-blur-md text-slate-900 border border-slate-300 font-extrabold text-sm hover:bg-white transition-all duration-300 rounded-full shadow-xl hover:shadow-2xl hover:-translate-y-1"
             >
               Request Consultation
             </button>
           </motion.div>
+
+          {/* Mobile & Tablet Stacked Value Cards (lg:hidden — Zero PC Interference) */}
+          <div className="lg:hidden grid grid-cols-1 sm:grid-cols-2 gap-4 mt-8 w-full max-w-xl text-left px-1">
+            <div className="p-5 bg-white/92 backdrop-blur-2xl border border-white/95 rounded-2xl shadow-[0_10px_30px_rgba(15,23,42,0.14)]">
+              <h2 className="text-[10px] font-extrabold uppercase tracking-[0.3em] text-blue-800 mb-1.5">Scale & Precision</h2>
+              <p className="text-xs text-slate-800 font-semibold leading-relaxed">
+                Engineered for the Modern Global Enterprise. We architect solutions that scale seamlessly across borders.
+              </p>
+            </div>
+            <div className="p-5 bg-white/92 backdrop-blur-2xl border border-white/95 rounded-2xl shadow-[0_10px_30px_rgba(15,23,42,0.14)]">
+              <div className="w-8 h-0.5 bg-blue-600 mb-2.5" />
+              <p className="text-xs text-slate-800 font-semibold leading-relaxed">
+                Strategic architecture for complex operational landscapes with absolute precision and data-driven insights.
+              </p>
+            </div>
+          </div>
         </div>
       </section>
 

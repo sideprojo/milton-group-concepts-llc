@@ -61,3 +61,17 @@
     @apply font-serif italic tracking-wide;
   }
 }
+
+/* Mobile-Only Enhancements (Zero interference with PC >= 768px) */
+@media (max-width: 767px), (hover: none) and (pointer: coarse) {
+  body, *, *::before, *::after {
+    cursor: auto !important;
+  }
+  .custom-cursor-desktop-only {
+    display: none !important;
+  }
+  .viewing-angle {
+    transform: none !important;
+  }
+}
+

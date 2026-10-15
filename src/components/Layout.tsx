@@ -60,21 +60,21 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
         <div className="absolute inset-0 bg-gradient-to-b from-white/75 via-white/55 to-slate-50/95" />
       </div>
 
-      {/* Top Left Logo */}
-      <div className={`fixed top-6 left-8 z-50 transition-all duration-500 ${location.pathname === '/contact' ? 'opacity-0 -translate-y-4 pointer-events-none' : 'opacity-100 translate-y-0'}`}>
+      {/* Top Left Logo — PC Desktop Only (Unchanged on PC) */}
+      <div className={`hidden md:block fixed top-6 left-8 z-50 transition-all duration-500 ${location.pathname === '/contact' ? 'opacity-0 -translate-y-4 pointer-events-none' : 'opacity-100 translate-y-0'}`}>
         <Link to="/">
           <ShieldLogo className="w-20 h-20 drop-shadow-lg hover:scale-105 transition-transform duration-500" />
         </Link>
       </div>
 
-      {/* Rocket Dock Navigation - Enhanced Clarity & WCAG AAA Contrast */}
+      {/* Rocket Dock Navigation — PC Desktop Only (Unchanged on PC) */}
       <header 
-        className={`fixed top-6 left-1/2 -translate-x-1/2 z-[100] pointer-events-auto transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+        className={`hidden md:block fixed top-6 left-1/2 -translate-x-1/2 z-[100] pointer-events-auto transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${
           visible ? 'translate-y-0 opacity-100' : '-translate-y-24 opacity-0'
         }`}
       >
         <nav className="bg-white/88 hover:bg-white/98 transition-colors duration-500 backdrop-blur-2xl border border-slate-300/80 shadow-[0_10px_35px_rgba(15,23,42,0.12)] px-8 py-3 rounded-full flex items-center gap-8">
-          <div className="hidden md:flex items-center gap-8">
+          <div className="flex items-center gap-8">
             {navLinks.map((link) => (
               <Link
                 key={link.path}
@@ -100,45 +100,104 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
               Client Portal
             </button>
           </div>
-
-          <button className="md:hidden text-slate-900 ml-4" onClick={() => setIsMenuOpen(!isMenuOpen)}>
-            {isMenuOpen ? <X size={20} /> : <Menu size={20} />}
-          </button>
         </nav>
+      </header>
 
-        {/* Mobile Nav Overlay */}
+      {/* Dedicated Mobile Top Header Bar (< 768px Only — Zero PC Interference) */}
+      <header
+        className={`md:hidden fixed top-0 inset-x-0 z-[100] px-4 pt-3 pb-2 transition-all duration-300 ${
+          visible ? 'translate-y-0 opacity-100' : '-translate-y-20 opacity-0 pointer-events-none'
+        }`}
+      >
+        <div className="bg-white/95 backdrop-blur-2xl border border-slate-300/90 shadow-[0_8px_25px_rgba(15,23,42,0.14)] rounded-2xl px-3.5 py-2.5 flex items-center justify-between">
+          <Link to="/" onClick={() => setIsMenuOpen(false)} className="flex items-center gap-2.5">
+            <ShieldLogo className="w-10 h-10 drop-shadow" />
+            <div className="flex flex-col text-left">
+              <span className="text-[11px] font-black tracking-[0.14em] text-slate-950 uppercase leading-none">Milton Group</span>
+              <span className="text-[9px] font-bold tracking-[0.18em] text-blue-700 uppercase mt-0.5">Concepts LLC</span>
+            </div>
+          </Link>
+
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => { setIsMenuOpen(false); setIsPortalModalOpen(true); }}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-900 text-white text-[10px] font-extrabold uppercase tracking-wider shadow-sm active:scale-95 transition-transform"
+            >
+              <Lock className="w-3 h-3 text-emerald-400" />
+              Portal
+            </button>
+            <button
+              aria-label="Toggle Menu"
+              className="p-2 rounded-xl bg-slate-100 text-slate-900 border border-slate-200 active:scale-95 transition-transform"
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+            >
+              {isMenuOpen ? <X size={18} /> : <Menu size={18} />}
+            </button>
+          </div>
+        </div>
+
+        {/* Mobile Slide-Down Drawer */}
         <AnimatePresence>
           {isMenuOpen && (
             <motion.div
-              initial={{ opacity: 0, scale: 0.95, y: -10 }}
+              initial={{ opacity: 0, scale: 0.96, y: -8 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: -10 }}
-              className="md:hidden absolute top-full left-1/2 -translate-x-1/2 mt-4 w-[90vw] bg-white/98 backdrop-blur-2xl border border-slate-300 shadow-2xl rounded-3xl overflow-hidden"
+              exit={{ opacity: 0, scale: 0.96, y: -8 }}
+              className="mt-2 w-full bg-white/98 backdrop-blur-2xl border border-slate-300 shadow-2xl rounded-2xl overflow-hidden"
             >
-              <div className="px-8 py-10 flex flex-col gap-6 items-center">
+              <div className="p-5 flex flex-col gap-3">
                 {navLinks.map((link) => (
                   <Link
                     key={link.path}
                     to={link.path}
                     onClick={() => setIsMenuOpen(false)}
-                    className={`text-xs font-extrabold uppercase tracking-[0.3em] ${
-                      location.pathname === link.path ? 'text-blue-700' : 'text-slate-800'
+                    className={`px-4 py-3 rounded-xl text-xs font-extrabold uppercase tracking-[0.22em] flex items-center justify-between ${
+                      location.pathname === link.path
+                        ? 'bg-blue-600 text-white shadow-sm'
+                        : 'bg-slate-50 text-slate-800 hover:bg-slate-100'
                     }`}
                   >
-                    {link.name}
+                    <span>{link.name}</span>
+                    <span className="text-[10px] opacity-75">→</span>
                   </Link>
                 ))}
-                <button
-                  onClick={() => { setIsMenuOpen(false); setIsPortalModalOpen(true); }}
-                  className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-slate-900 text-white text-xs font-extrabold uppercase tracking-[0.2em]"
+                <a
+                  href="https://mgc-external-site-254657731107.us-west1.run.app/saas-apps-and-lms-showcase.html"
+                  className="px-4 py-3 rounded-xl bg-gradient-to-r from-blue-700 to-indigo-700 text-white text-xs font-extrabold uppercase tracking-[0.16em] flex items-center justify-between shadow-md"
                 >
-                  <Lock className="w-3.5 h-3.5 text-emerald-400" /> Client Portal
-                </button>
+                  <span>Apps, Courses & Showcase</span>
+                  <span className="text-[10px] bg-white/20 px-2 py-0.5 rounded-full">LIVE</span>
+                </a>
               </div>
             </motion.div>
           )}
         </AnimatePresence>
       </header>
+
+      {/* Dedicated Mobile Bottom Thumb Bar (< 768px Only) */}
+      <nav className="md:hidden fixed bottom-3 inset-x-3 z-[95] bg-slate-950/95 backdrop-blur-2xl border border-white/15 shadow-[0_12px_32px_rgba(2,6,23,0.45)] rounded-2xl px-2 py-2 flex items-center justify-around">
+        {navLinks.map((link) => {
+          const isActive = location.pathname === link.path;
+          return (
+            <Link
+              key={link.path}
+              to={link.path}
+              onClick={() => setIsMenuOpen(false)}
+              className={`px-3 py-1.5 rounded-xl text-[10px] font-extrabold uppercase tracking-wider transition-all ${
+                isActive ? 'bg-blue-600 text-white shadow-sm' : 'text-slate-300'
+              }`}
+            >
+              {link.name}
+            </Link>
+          );
+        })}
+        <button
+          onClick={() => setIsPortalModalOpen(true)}
+          className="px-3 py-1.5 rounded-xl bg-emerald-500/20 border border-emerald-400/40 text-emerald-300 text-[10px] font-extrabold uppercase tracking-wider flex items-center gap-1"
+        >
+          <Lock className="w-2.5 h-2.5" /> SSO
+        </button>
+      </nav>
 
       {/* Main Content Area */}
       <main className="flex-grow relative z-10">

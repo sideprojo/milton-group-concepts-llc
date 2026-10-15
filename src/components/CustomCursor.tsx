@@ -49,7 +49,7 @@ export const CustomCursor = () => {
   }, [cursorX, cursorY]);
 
   return (
-    <div className="pointer-events-none fixed inset-0 z-[99999] overflow-hidden">
+    <div className="hidden md:block pointer-events-none fixed inset-0 z-[99999] overflow-hidden custom-cursor-desktop-only">
       {/* Subtle Trailing Tri-Color Halo (Red, White & Blue) */}
       <motion.div
         className="absolute top-0 left-0 w-9 h-9 flex items-center justify-center"
