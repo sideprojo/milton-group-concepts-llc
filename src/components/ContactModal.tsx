@@ -1,15 +1,23 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { X, Send } from 'lucide-react';
+import { dispatchWorkspaceLead } from '../lib/workspaceWebhook';
 
 export const ContactModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) => {
   const [formData, setFormData] = useState({ name: '', email: '', company: '', message: '' });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const subject = encodeURIComponent(`New Inquiry from ${formData.name} (${formData.company})`);
-    const body = encodeURIComponent(`Name: ${formData.name}\nEmail: ${formData.email}\nCompany: ${formData.company}\n\nMessage:\n${formData.message}`);
-    window.location.href = `mailto:contact@miltongroupsecurity.org?subject=${subject}&body=${body}`;
+    const res = await dispatchWorkspaceLead({
+      sourceSite: 'Milton Group Concepts LLC',
+      formType: 'Request Consultation',
+      fullName: formData.name,
+      email: formData.email,
+      organization: formData.company || 'External Inquiry',
+      sectorOrService: 'Strategic Consultation',
+      message: formData.message
+    });
+    window.location.href = res.mailtoUrl;
     onClose();
   };
 
