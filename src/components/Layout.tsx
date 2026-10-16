@@ -92,13 +92,13 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
 
             <div className="h-4 w-px bg-slate-300" />
 
-            <button
-              onClick={() => setIsPortalModalOpen(true)}
+            <a
+              href="/portal"
               className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-slate-900 hover:bg-blue-700 text-white text-[10px] font-extrabold uppercase tracking-[0.18em] transition-all shadow-sm"
             >
               <Lock className="w-3 h-3 text-emerald-400" />
               Client Portal
-            </button>
+            </a>
           </div>
         </nav>
       </header>
@@ -119,13 +119,14 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
           </Link>
 
           <div className="flex items-center gap-2">
-            <button
-              onClick={() => { setIsMenuOpen(false); setIsPortalModalOpen(true); }}
+            <a
+              href="/portal"
+              onClick={() => setIsMenuOpen(false)}
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-900 text-white text-[10px] font-extrabold uppercase tracking-wider shadow-sm active:scale-95 transition-transform"
             >
               <Lock className="w-3 h-3 text-emerald-400" />
               Portal
-            </button>
+            </a>
             <button
               aria-label="Toggle Menu"
               className="p-2 rounded-xl bg-slate-100 text-slate-900 border border-slate-200 active:scale-95 transition-transform"
@@ -162,7 +163,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
                   </Link>
                 ))}
                 <a
-                  href="https://mgc-external-site-254657731107.us-west1.run.app/saas-apps-and-lms-showcase.html"
+                  href="/apps"
                   className="px-4 py-3 rounded-xl bg-gradient-to-r from-blue-700 to-indigo-700 text-white text-xs font-extrabold uppercase tracking-[0.16em] flex items-center justify-between shadow-md"
                 >
                   <span>Apps, Courses & Showcase</span>
@@ -191,12 +192,12 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
             </Link>
           );
         })}
-        <button
-          onClick={() => setIsPortalModalOpen(true)}
+        <a
+          href="/auth"
           className="px-3 py-1.5 rounded-xl bg-emerald-500/20 border border-emerald-400/40 text-emerald-300 text-[10px] font-extrabold uppercase tracking-wider flex items-center gap-1"
         >
           <Lock className="w-2.5 h-2.5" /> SSO
-        </button>
+        </a>
       </nav>
 
       {/* Main Content Area */}
@@ -246,12 +247,12 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
                   </li>
                 ))}
                 <li>
-                  <button
-                    onClick={() => setIsPortalModalOpen(true)}
+                  <a
+                    href="/portal"
                     className="hover:text-emerald-400 transition-colors flex items-center gap-2 text-emerald-300 font-semibold"
                   >
                     <Lock className="w-3.5 h-3.5" /> Client & Partner Portal
-                  </button>
+                  </a>
                 </li>
               </ul>
             </div>
