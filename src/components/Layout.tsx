@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { ShieldLogo } from './UI';
-import { Menu, X, Phone, Mail, MapPin, Lock } from 'lucide-react';
+import { Menu, X, Phone, Mail, MapPin, Lock, Newspaper } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { NewsFeed } from './NewsFeed';
 import { ClientLoginModal } from './ClientLoginModal';
@@ -40,6 +40,12 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <>
+    <a
+      href="#main-content"
+      className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[200] focus:px-4 focus:py-2 focus:rounded-xl focus:bg-blue-600 focus:text-white focus:font-bold"
+    >
+      Skip to main content
+    </a>
     <div className="min-h-screen flex flex-col bg-slate-50 relative perspective-1000">
       {/* Seamless City Background - Propagates across all pages and footer */}
       <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden bg-slate-900">
@@ -60,21 +66,21 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
         <div className="absolute inset-0 bg-gradient-to-b from-white/75 via-white/55 to-slate-50/95" />
       </div>
 
-      {/* Top Left Logo — PC Desktop Only (Unchanged on PC) */}
+      {/* Top Left Logo — PC Desktop Only */}
       <div className={`hidden md:block fixed top-6 left-8 z-50 transition-all duration-500 ${location.pathname === '/contact' ? 'opacity-0 -translate-y-4 pointer-events-none' : 'opacity-100 translate-y-0'}`}>
-        <Link to="/">
+        <Link to="/" aria-label="Milton Group Concepts Home">
           <ShieldLogo className="w-20 h-20 drop-shadow-lg hover:scale-105 transition-transform duration-500" />
         </Link>
       </div>
 
-      {/* Rocket Dock Navigation — PC Desktop Only (Unchanged on PC) */}
+      {/* Rocket Dock Navigation — PC Desktop Only */}
       <header 
         className={`hidden md:block fixed top-6 left-1/2 -translate-x-1/2 z-[100] pointer-events-auto transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${
           visible ? 'translate-y-0 opacity-100' : '-translate-y-24 opacity-0'
         }`}
       >
-        <nav className="bg-white/88 hover:bg-white/98 transition-colors duration-500 backdrop-blur-2xl border border-slate-300/80 shadow-[0_10px_35px_rgba(15,23,42,0.12)] px-8 py-3 rounded-full flex items-center gap-8">
-          <div className="flex items-center gap-8">
+        <nav aria-label="Primary Navigation" className="bg-white/88 hover:bg-white/98 transition-colors duration-500 backdrop-blur-2xl border border-slate-300/80 shadow-[0_10px_35px_rgba(15,23,42,0.12)] px-8 py-3 rounded-full flex items-center gap-7">
+          <div className="flex items-center gap-7">
             {navLinks.map((link) => (
               <Link
                 key={link.path}
@@ -90,6 +96,14 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
               </Link>
             ))}
 
+            <a
+              href="/newsletter"
+              className="text-[11px] font-extrabold uppercase tracking-[0.18em] text-slate-800 hover:text-blue-700 transition-colors flex items-center gap-1.5"
+            >
+              <Newspaper className="w-3.5 h-3.5 text-blue-600" />
+              Newsletter
+            </a>
+
             <div className="h-4 w-px bg-slate-300" />
 
             <a
@@ -103,116 +117,17 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
         </nav>
       </header>
 
-      {/* Dedicated Mobile Top Header Bar (< 768px Only — Zero PC Interference) */}
-      <header
-        className={`md:hidden fixed top-0 inset-x-0 z-[100] px-4 pt-3 pb-2 transition-all duration-300 ${
-          visible ? 'translate-y-0 opacity-100' : '-translate-y-20 opacity-0 pointer-events-none'
-        }`}
-      >
-        <div className="bg-white/95 backdrop-blur-2xl border border-slate-300/90 shadow-[0_8px_25px_rgba(15,23,42,0.14)] rounded-2xl px-3.5 py-2.5 flex items-center justify-between">
-          <Link to="/" onClick={() => setIsMenuOpen(false)} className="flex items-center gap-2.5">
-            <ShieldLogo className="w-10 h-10 drop-shadow" />
-            <div className="flex flex-col text-left">
-              <span className="text-[11px] font-black tracking-[0.14em] text-slate-950 uppercase leading-none">Milton Group</span>
-              <span className="text-[9px] font-bold tracking-[0.18em] text-blue-700 uppercase mt-0.5">Concepts LLC</span>
-            </div>
-          </Link>
-
-          <div className="flex items-center gap-2">
-            <a
-              href="/portal"
-              onClick={() => setIsMenuOpen(false)}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-900 text-white text-[10px] font-extrabold uppercase tracking-wider shadow-sm active:scale-95 transition-transform"
-            >
-              <Lock className="w-3 h-3 text-emerald-400" />
-              Portal
-            </a>
-            <button
-              aria-label="Toggle Menu"
-              className="p-2 rounded-xl bg-slate-100 text-slate-900 border border-slate-200 active:scale-95 transition-transform"
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-            >
-              {isMenuOpen ? <X size={18} /> : <Menu size={18} />}
-            </button>
-          </div>
-        </div>
-
-        {/* Mobile Slide-Down Drawer */}
-        <AnimatePresence>
-          {isMenuOpen && (
-            <motion.div
-              initial={{ opacity: 0, scale: 0.96, y: -8 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.96, y: -8 }}
-              className="mt-2 w-full bg-white/98 backdrop-blur-2xl border border-slate-300 shadow-2xl rounded-2xl overflow-hidden"
-            >
-              <div className="p-5 flex flex-col gap-3">
-                {navLinks.map((link) => (
-                  <Link
-                    key={link.path}
-                    to={link.path}
-                    onClick={() => setIsMenuOpen(false)}
-                    className={`px-4 py-3 rounded-xl text-xs font-extrabold uppercase tracking-[0.22em] flex items-center justify-between ${
-                      location.pathname === link.path
-                        ? 'bg-blue-600 text-white shadow-sm'
-                        : 'bg-slate-50 text-slate-800 hover:bg-slate-100'
-                    }`}
-                  >
-                    <span>{link.name}</span>
-                    <span className="text-[10px] opacity-75">→</span>
-                  </Link>
-                ))}
-                <a
-                  href="/apps"
-                  className="px-4 py-3 rounded-xl bg-gradient-to-r from-blue-700 to-indigo-700 text-white text-xs font-extrabold uppercase tracking-[0.16em] flex items-center justify-between shadow-md"
-                >
-                  <span>Apps, Courses & Showcase</span>
-                  <span className="text-[10px] bg-white/20 px-2 py-0.5 rounded-full">LIVE</span>
-                </a>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </header>
-
-      {/* Dedicated Mobile Bottom Thumb Bar (< 768px Only) */}
-      <nav className="md:hidden fixed bottom-3 inset-x-3 z-[95] bg-slate-950/95 backdrop-blur-2xl border border-white/15 shadow-[0_12px_32px_rgba(2,6,23,0.45)] rounded-2xl px-2 py-2 flex items-center justify-around">
-        {navLinks.map((link) => {
-          const isActive = location.pathname === link.path;
-          return (
-            <Link
-              key={link.path}
-              to={link.path}
-              onClick={() => setIsMenuOpen(false)}
-              className={`px-3 py-1.5 rounded-xl text-[10px] font-extrabold uppercase tracking-wider transition-all ${
-                isActive ? 'bg-blue-600 text-white shadow-sm' : 'text-slate-300'
-              }`}
-            >
-              {link.name}
-            </Link>
-          );
-        })}
-        <a
-          href="/auth"
-          className="px-3 py-1.5 rounded-xl bg-emerald-500/20 border border-emerald-400/40 text-emerald-300 text-[10px] font-extrabold uppercase tracking-wider flex items-center gap-1"
-        >
-          <Lock className="w-2.5 h-2.5" /> SSO
-        </a>
-      </nav>
-
       {/* Main Content Area */}
-      <main className="flex-grow relative z-10">
+      <main id="main-content" className="flex-grow relative z-10">
         {children}
       </main>
 
-      {/* News Feed Section */}
+      {/* News Feed & Newsletter Section */}
       {location.pathname !== '/contact' && <NewsFeed />}
 
       {/* Footer */}
       <footer className="relative z-10 border-t border-white/15 pt-8 pb-12 mt-auto">
-        {/* Footer Background Blend - Seamlessly continues the page background */}
         <div className="absolute inset-0 z-0 pointer-events-none">
-          {/* Darkening overlay to ensure text readability while letting the page background show through */}
           <div className="absolute inset-0 bg-slate-950/85" />
           <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10 mix-blend-overlay" />
           <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/90 to-transparent" />
@@ -246,6 +161,14 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
                     </Link>
                   </li>
                 ))}
+                <li>
+                  <a
+                    href="/newsletter"
+                    className="hover:text-blue-400 transition-colors flex items-center gap-2 text-blue-300 font-semibold"
+                  >
+                    <Newspaper className="w-3.5 h-3.5" /> Executive Newsletter
+                  </a>
+                </li>
                 <li>
                   <a
                     href="/portal"
@@ -285,8 +208,8 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
           <div className="pt-8 border-t border-white/15 flex flex-col md:flex-row justify-between items-center gap-6 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-300">
             <p>© 2026 Milton Group Concepts LLC. All Rights Reserved.</p>
             <div className="flex gap-8">
-              <Link to="#" className="hover:text-white transition-colors">Privacy</Link>
-              <Link to="#" className="hover:text-white transition-colors">Terms</Link>
+              <a href="/newsletter" className="hover:text-white transition-colors">Newsletter</a>
+              <a href="/mobile" className="hover:text-white transition-colors">Mobile Command</a>
               <Link to="#" className="hover:text-white transition-colors">Compliance</Link>
             </div>
           </div>
@@ -294,7 +217,6 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
       </footer>
     </div>
 
-    {/* Secure Client & Partner Login / Onboarding Modal (Outside perspective-1000 for true viewport fixed centering) */}
     <ClientLoginModal isOpen={isPortalModalOpen} onClose={() => setIsPortalModalOpen(false)} />
     </>
   );
