@@ -33,7 +33,7 @@ RUN printf 'server {\n\
     proxy_redirect https://mgc-external-site-254657731107.us-west1.run.app/ /;\n\
   }\n\
 \n\
-  location ~ ^/(auth|login|request-access|portal|onboarding|onboarding-portal|workspace|member-portal|agile|agile-board|access-admin|command|admin-command|apps|finance|academy|commerce|chronos-lab|chronos|data-hub|agent-studio|earth-3d|vr-deck|integrations|sam-radar|trust-center)(/|$) {\n\
+  location ~ ^/(auth|login|request-access|portal|employee-login|staff-login|newsletter|consultation|consultation-form|mobile|mobile-control|onboarding|onboarding-portal|workspace|member-portal|agile|agile-board|access-admin|command|admin-command|apps|finance|academy|commerce|chronos-lab|chronos|data-hub|agent-studio|earth-3d|vr-deck|integrations|sam-radar|trust-center)(/|$) {\n\
     proxy_pass https://mgc-external-site-254657731107.us-west1.run.app;\n\
     proxy_http_version 1.1;\n\
     proxy_ssl_server_name on;\n\

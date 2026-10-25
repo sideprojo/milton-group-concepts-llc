@@ -57,7 +57,7 @@ export const ContactModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: ()
                     value={formData.name} 
                     onChange={e => setFormData({...formData, name: e.target.value})} 
                     className="w-full bg-slate-50/50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all text-slate-800" 
-                    placeholder="John Doe" 
+                    placeholder="Full Name" 
                   />
                 </div>
                 <div className="space-y-1.5">
@@ -68,7 +68,7 @@ export const ContactModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: ()
                     value={formData.email} 
                     onChange={e => setFormData({...formData, email: e.target.value})} 
                     className="w-full bg-slate-50/50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all text-slate-800" 
-                    placeholder="john@example.com" 
+                    placeholder="Work Email" 
                   />
                 </div>
               </div>
